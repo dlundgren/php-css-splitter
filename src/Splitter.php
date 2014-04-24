@@ -144,7 +144,7 @@ class Splitter
 		$blocks = array();
 		$css    = $this->stripComments($css);
 		$offset = 0;
-		if (preg_match_all('/^\s*(@media[^{]*){([^{}]*{[^}]*})\s*}\s*$/ism', $css, $matches, PREG_OFFSET_CAPTURE) > 0) {
+		if (preg_match_all('/(@media[^{]*){([^{}]*{[^}]*})*\s*}/ism', $css, $matches, PREG_OFFSET_CAPTURE) > 0) {
 			foreach ($matches[0] as $key => $match) {
 				list($media, $start) = $match;
 				if ($start > $offset) {
@@ -154,9 +154,15 @@ class Splitter
 					}
 				}
 				$offset         = $start + strlen($media);
-				$block          = $this->summarizeBlock($matches[2][$key][0]);
+				$block          = $this->summarizeBlock(substr($media, strpos($media, '{') + 1, -1));
 				$block['media'] = trim($matches[1][$key][0]);
 				$blocks[]       = $block;
+			}
+
+			// catch the remainder after the last
+			$block = trim(substr($css, $offset));
+			if (!empty($block)) {
+				$blocks[] = $this->summarizeBlock($block);
 			}
 		}
 		else {

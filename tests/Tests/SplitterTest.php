@@ -21,6 +21,7 @@ class SplitterTest
 		return array(
 			array("$cssDirectory/basic-with-charset-1.expected.css", "$cssDirectory/basic-with-charset.css", 1, 2),
 			array("$cssDirectory/basic-with-charset-2.expected.css", "$cssDirectory/basic-with-charset.css", 2, 2),
+			array("$cssDirectory/4096-media-queries.expected.css", "$cssDirectory/4096-media-queries.css", 2, Splitter::MAX_SELECTORS_DEFAULT),
 		);
 	}
 
