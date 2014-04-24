@@ -1,0 +1,20 @@
+/**
+ * Test file for basic css
+ * .blue,.red
+ *
+ * @author Someone
+ */
+.red {
+	color: red;
+}
+
+.blue { color:blue;
+}
+
+.green,.yellow{color:green}#colors{display:none}
+
+@media only screen and (min-width: 30em) {
+	#colors {
+		display:inline-block
+	}
+}

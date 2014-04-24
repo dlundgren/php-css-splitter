@@ -1,0 +1,25 @@
+{
+	"name"        : "csssplitter/cssplitter",
+	"description" : "PHP Css Splitter for IE 4096 selector limit",
+	"type"        : "library",
+	"keywords"    : [
+		"css splitter"
+	],
+	"license"     : "MIT",
+	"authors"     : [
+		{
+			"name"  : "David Lundgren",
+			"email" : "dlundgren@syberisle.net",
+			"role"  : "lead"
+		}
+	],
+	"autoload"    : {
+		"psr-4" : {
+			"CssSplitter\\" : "src"
+		}
+	},
+	"require"     : {
+		"php"             : ">=5.3.0",
+		"phpunit/phpunit" : "3.7.35"
+	}
+}

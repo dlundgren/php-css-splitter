@@ -1,0 +1,45 @@
+/**
+ * Test file for basic css
+ * .blue,.red
+ *
+ * @author Someone
+ */
+.red {
+	color: red;
+}
+
+.blue { color:blue;
+}
+
+.green,.yellow{color:green}#colors{display:none}
+
+@media only screen and (min-width: 30em) {
+	#colors {
+		display:inline-block
+	}
+}
+
+@media only screen and (min-width: 20em) and (max-width:21.99em)
+{
+	.coloring {
+		color: red;
+	}
+}
+.coloring {
+	color: magenta;
+}
+@media only screen and (min-width: 22em) and (max-width:22.99em)
+{
+	.coloring {
+		color: purple;
+	}
+}
+.table {
+	display:none;
+}
+@media only screen and (min-width: 23em) and (max-width:24.99em)
+{
+	.coloring {
+		color: white;
+	}
+}
