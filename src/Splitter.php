@@ -181,12 +181,26 @@ class Splitter
 	private function splitIntoRules($css)
 	{
 		$rules = preg_split('/}/', trim($this->stripComments($css)));
-		array_walk(
-			$rules, function (&$s) {
-			!empty($s) && $s = trim("$s}");
-		});
-
-		return array_filter($rules);
+		
+		// complete rules
+		foreach ($rules as $key => $rule) {
+            		if($key < count($rules)-1) $completeRules[$key]=$rule.'}'; // not the last one which don't have } at the end
+	        }
+	
+	        // clean rules: fusion of non completed rules
+	        for ($i=0; $i < count($completeRules)-1; $i++) { 
+	            if(isset($completeRules[$i])){
+	                $nbOpened=substr_count($completeRules[$i], '{');
+	                $nbClosed=substr_count($completeRules[$i], '}');
+	
+	                if($nbOpened!=$nbClosed){ // if number of bracket don't match we merge with next rule
+	                    $completeRules[$i+1]=$completeRules[$i].''.$completeRules[$i+1];
+	                    $completeRules[$i]='';
+	                }
+	            }
+	        }
+	        
+	        return array_filter($completeRules);
 	}
 
 	/**
