@@ -90,8 +90,8 @@ class Splitter
 					break;
 				}
 
-				if (!$appliedMedia && isset($block['media'])) {
-					$output .= $block['media'] . ' {';
+				if (!$appliedMedia && isset($block['at-rule'])) {
+					$output .= $block['at-rule'] . ' {';
 					$appliedMedia = true;
 				}
 				$output .= $rule['rule'];
@@ -144,22 +144,44 @@ class Splitter
 		$blocks = array();
 		$css    = $this->stripComments($css);
 		$offset = 0;
-		if (preg_match_all('/(@media[^{]*){([^{}]*{[^}]*})*\s*}/ism', $css, $matches, PREG_OFFSET_CAPTURE) > 0) {
+
+		// catch all @feature {...} blocks
+		if (preg_match_all('/(@[^{]+){([^{}]*{[^}]*})*\s*}/ism', $css, $matches, PREG_OFFSET_CAPTURE) > 0) {
 			foreach ($matches[0] as $key => $match) {
-				list($media, $start) = $match;
+				$atRule              = trim($matches[1][$key][0]);
+				list($rules, $start) = $match;
+
 				if ($start > $offset) {
+					// make previous selectors into their own block
 					$block = trim(substr($css, $offset, $start - $offset));
 					if (!empty($block)) {
 						$blocks[] = $this->summarizeBlock($block);
 					}
 				}
-				$offset         = $start + strlen($media);
-				$block          = $this->summarizeBlock(substr($media, strpos($media, '{') + 1, -1));
-				$block['media'] = trim($matches[1][$key][0]);
-				$blocks[]       = $block;
+				$offset = $start + strlen($rules);
+
+				// currently only @media rules need to be parsed and counted for IE9 selectors
+				if (strpos($atRule, '@media') === 0) {
+					$block  = $this->summarizeBlock(substr($rules, strpos($rules, '{') + 1, -1));
+				}
+				else {
+					$block  = array(
+						'count'   => 1,
+						'rules'   => array(
+							array(
+								'rule' => substr($rules, strpos($rules, '{') + 1, -1),
+								'count' => 1,
+							)
+						),
+
+					);
+				}
+
+				$block['at-rule'] = $atRule;
+				$blocks[]               = $block;
 			}
 
-			// catch the remainder after the last
+			// catch any remaining as it's own block
 			$block = trim(substr($css, $offset));
 			if (!empty($block)) {
 				$blocks[] = $this->summarizeBlock($block);
@@ -181,11 +203,14 @@ class Splitter
 	private function splitIntoRules($css)
 	{
 		$rules = preg_split('/}/', trim($this->stripComments($css)));
-		array_walk(
-			$rules, function (&$s) {
-			!empty($s) && $s = trim("$s}");
-		});
 
+		// complete any rules by append } to them
+		array_walk($rules,
+			function (&$s) {
+				!empty($s) && $s = trim("$s}");
+			});
+
+		// clears out any empty rules
 		return array_filter($rules);
 	}
 

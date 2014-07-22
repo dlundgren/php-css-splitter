@@ -19,6 +19,8 @@ class SplitterTest
 	{
 		$cssDirectory = __DIR__ . '/../_files/CssData';
 		return array(
+			// format: $expectedFile, $startFile, $numberOfPartToCheck, $numberOfSelectors
+			array("$cssDirectory/other-at-rules.expected.css", "$cssDirectory/other-at-rules.css", 1, 3),
 			array("$cssDirectory/basic-with-charset-1.expected.css", "$cssDirectory/basic-with-charset.css", 1, 2),
 			array("$cssDirectory/basic-with-charset-2.expected.css", "$cssDirectory/basic-with-charset.css", 2, 2),
 			array("$cssDirectory/4096-media-queries.expected.css", "$cssDirectory/4096-media-queries.css", 2, Splitter::MAX_SELECTORS_DEFAULT),
@@ -34,6 +36,7 @@ class SplitterTest
 			array(file_get_contents("$cssDirectory/basic-with-media-query.css"), 6),
 			array(file_get_contents("$cssDirectory/basic-with-media-queries.css"), 11),
 			array(file_get_contents("$cssDirectory/media-queries.css"), 3),
+			array(file_get_contents("$cssDirectory/other-at-rules.css"), 2),
 		);
 	}
 
@@ -71,22 +74,6 @@ class SplitterTest
 	 */
 	public function testCountSplit()
 	{
-		$css = '';
-		for ($i = 1; $i <= 4096; ++$i) {
-			$css .= ".selector-{$i} {display:none}";
-		}
-
-		$css1 = "
-		.selector-1 { display:none }
-		@media only screen {
-			.selector-2,.selector-3 { display:none }
-		}
-		.selector-4 { display:none }
-		@media only screen {
-			.selector-4 { display:block }
-		}
-		.selector-5 { display:none }
-		";
 		$css = "
 		.selector-1 { display:none }
 		.selector-2,.selector-3 { display:none }
