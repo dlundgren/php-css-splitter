@@ -1,7 +1,9 @@
 PHP Css Splitter
 ================
 
-Splits stylesheets that go beyond the IE limit of 3096 selectors. See this [MSDN blog post](http://blogs.msdn.com/b/ieinternals/archive/2011/05/14/internet-explorer-stylesheet-rule-selector-import-sheet-limit-maximum.aspx) for more information about this.
+[![Build Status](https://travis-ci.org/dlundgren/php-css-splitter.svg?branch=master)](https://travis-ci.org/dlundgren/php-css-splitter)
+
+Splits stylesheets that go beyond the IE limit of 4096 selectors. See this [MSDN blog post](http://blogs.msdn.com/b/ieinternals/archive/2011/05/14/internet-explorer-stylesheet-rule-selector-import-sheet-limit-maximum.aspx) for more information about this.
 
 ## Installation
 
