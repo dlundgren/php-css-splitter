@@ -16,12 +16,21 @@ The default max selectors is 4095.
 ```php
 
 $splitter = new \CssSplitter\Splitter();
-$count = $splitter->countSelectors($css)  - 4095;
-if ($count > 0) {
-    $part = 2;
-    for($i = $count; $i > 0; $i -= 4095) {
-        file_put_contents("styles-split{$part}.css", $splitter->split($css, 2));
-    }
+// Load your css file
+$css = file_get_contents('styles.css');
+
+// Skip the first part as the Internet Explorer interprets your css until it reaches the limit
+$selector_count = $splitter->countSelectors($css) - 4095;
+// Calculate how many additional parts we need to create
+$additional_part_count =  ceil($selector_count / 4095);
+
+if($additional_part_count > 0) {
+	// Loop and create the additional parts
+	// Add an offset of two as we are creating the css from the second part on
+	for($part = 2; $part < $additional_part_count + 2; $part++) {
+		// Create or update the css files
+		file_put_contents('styles_'. $part .'.css', $splitter->split($css, $part));
+	}
 }
 
 
