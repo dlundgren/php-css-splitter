@@ -49,6 +49,15 @@ class SplitterTest
 		self::assertEquals($expectedCount, $splitter->countSelectors($css));
 	}
 
+	/**
+	 * @dataProvider provideCssFilesAndCounts
+	 */
+	public function testCountSelectorsWorksWithCachedCss($css, $expectedCount)
+	{
+		$splitter = new Splitter($css);
+		self::assertEquals($expectedCount, $splitter->countSelectors());
+	}
+
 	public function testCountSplitDefaultSize()
 	{
 		$css = '';
@@ -57,6 +66,18 @@ class SplitterTest
 		}
 
 		$splitter = new Splitter();
+		self::assertEquals('.selector-4096 {display:none}', $splitter->split($css, 2));
+	}
+
+	public function testCountWorksWithCachedCssAndOverride()
+	{
+		$css = '';
+		for ($i = 1; $i <= 4096; ++$i) {
+			$css .= ".selector-{$i} {display:none}";
+		}
+		$cssSmall = '.selector-9999 {display:none}';
+
+		$splitter = new Splitter($cssSmall);
 		self::assertEquals('.selector-4096 {display:none}', $splitter->split($css, 2));
 	}
 

@@ -28,15 +28,40 @@ class Splitter
 	const MAX_SELECTORS_DEFAULT = 4095;
 
 	/**
+	 * @var string Both to see if CSS is already loaded and if different CSS is passed then earlier
+	 */
+	protected $css;
+
+	/**
+	 * @var array Parsed CSS blocks
+	 */
+	protected $parsedCss;
+
+	/**
+	 * Splitter constructor.
+	 */
+	public function __construct($css = null)
+	{
+		if ($css !== null) {
+			$this->css = $css;
+			$this->parsedCss = $this->splitIntoBlocks($this->css);
+		}
+	}
+
+	/**
 	 * Counts the selectors in the given css
 	 *
 	 * @param string $css
 	 * @return int The count of selectors in the CSS
 	 */
-	public function countSelectors($css)
+	public function countSelectors($css = null)
 	{
 		$count = 0;
-		foreach ($this->splitIntoBlocks($css) as $rules) {
+		if ($css !== null && $this->css !== $css) {
+			$this->css = $css;
+			$this->parsedCss = $this->splitIntoBlocks($this->css);
+		}
+		foreach ($this->parsedCss as $rules) {
 			$count += $rules['count'];
 		}
 
@@ -51,27 +76,31 @@ class Splitter
 	 * @param int    $maxSelectors
 	 * @return null|string
 	 */
-	public function split($css, $part = 1, $maxSelectors = self::MAX_SELECTORS_DEFAULT)
+	public function split($css = null, $part = 1, $maxSelectors = self::MAX_SELECTORS_DEFAULT)
 	{
-		if (empty($css)) {
+		if (empty($css) && empty($this->css)) {
 			return null;
 		}
 
-		$charset = $this->extractCharset($css);
-		isset($charset) && $css = str_replace($charset, '', $css);
-		if (empty($css)) {
+		if (!empty($css) && $this->css !== $css) {
+			$this->css = $css;
+		}
+
+		$charset = $this->extractCharset($this->css);
+		isset($charset) && $this->css = str_replace($charset, '', $this->css);
+		if (empty($this->css)) {
 			return null;
 		}
 
-		$blocks = $this->splitIntoBlocks($css);
-		if (empty($blocks)) {
+		$this->parsedCss = $this->splitIntoBlocks($this->css);
+		if (empty($this->parsedCss)) {
 			return null;
 		}
 
 		$output    = $charset ? : '';
 		$count     = 0;
 		$partCount = 1;
-		foreach ($blocks as $block) {
+		foreach ($this->parsedCss as $block) {
 			$appliedMedia = false;
 			foreach ($block['rules'] as $rule) {
 				$tmpCount = $rule['count'];
