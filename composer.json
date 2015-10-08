@@ -1,5 +1,5 @@
 {
-	"name"        : "csssplitter/csssplitter",
+	"name"        : "dlundgren/css-splitter",
 	"description" : "PHP Css Splitter for IE 4096 selector limit",
 	"type"        : "library",
 	"keywords"    : [
