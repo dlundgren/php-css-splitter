@@ -11,9 +11,10 @@
 namespace CssSplitter\Tests;
 
 use CssSplitter\Splitter;
+use PHPUnit\Framework\TestCase;
 
 class SplitterTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	public static function provideSplitFilesAndExpectedResults()
 	{
