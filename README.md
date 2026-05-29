@@ -7,7 +7,13 @@ Splits stylesheets that go beyond the IE limit of 4096 selectors. See this [MSDN
 
 ## Installation
 
-Use composer
+It's recommended to use [Composer](https://getcomposer.org) to install
+
+```bash
+$ composer require dlundgren/php-css-splitter
+```
+
+This will install the CssSplitter library and any required dependencies.
 
 ## Usage
 
@@ -32,11 +38,10 @@ if($additional_part_count > 0) {
 		file_put_contents('styles_'. $part .'.css', $splitter->split($css, $part));
 	}
 }
-
-
 ```
+
 ## Credits & License
 
 Original inspiration came from the Ruby gem [CssSplitter](https://github.com/zweilove/css_splitter).
 
-Uses the MIT license.
+CssSplitter is licensed under the MIT license. See [License File](LICENSE) for more information.
