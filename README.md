@@ -1,9 +1,9 @@
 PHP Css Splitter
 ================
 
-[![Build Status](https://travis-ci.org/dlundgren/php-css-splitter.svg?branch=master)](https://travis-ci.org/dlundgren/php-css-splitter)
+![Tests](https://github.com/dlundgren/php-css-splitter/actions/workflows/tests.yml/badge.svg?event=push)
 
-Splits stylesheets that go beyond the IE limit of 4096 selectors. See this [MSDN blog post](http://blogs.msdn.com/b/ieinternals/archive/2011/05/14/internet-explorer-stylesheet-rule-selector-import-sheet-limit-maximum.aspx) for more information about this.
+Splits stylesheets that go beyond the IE limit of 4096 selectors. See this [MSDN blog post](https://learn.microsoft.com/en-us/archive/blogs/ieinternals/stylesheet-limits-in-internet-explorer) for more information about this.
 
 ## Installation
 
